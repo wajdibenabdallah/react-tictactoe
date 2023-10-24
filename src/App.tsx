@@ -9,11 +9,18 @@ import Alert from "@mui/material/Alert";
 import Button from "@mui/material/Button";
 
 function App() {
-  console.log();
   const [player, setPlayer] = React.useState<Player>(Player.X);
-  const [cases, setCases] = React.useState<Array<Player>>([]);
+  const [cases, setCases] = React.useState<Array<Player | undefined>>([]);
   const [winner, setWinner] = React.useState<Player | null>(null);
 
+  const isDraw = () => {
+    if (cases.length === 0) return false;
+    for (let index = 0; index < 9; index++) {
+      console.log(cases[index]);
+      if (!cases[index]) return false;
+    }
+    return true;
+  };
   const replay = () => {
     setWinner(null);
     setCases([]);
@@ -36,7 +43,6 @@ function App() {
   };
 
   const click = (index: number) => {
-    console.log("winner", winner);
     if (!winner) {
       setCases((prevCases) => {
         if (!prevCases[index]) {
@@ -79,6 +85,24 @@ function App() {
           }
         >
           {winner} is the winner
+        </Alert>
+      )}
+      {!winner && isDraw() && (
+        <Alert
+          icon={false}
+          style={{ width: "28rem" }}
+          action={
+            <Button
+              onClick={replay}
+              color="inherit"
+              size="small"
+              style={{ border: "solid 1px" }}
+            >
+              Click here to Replay
+            </Button>
+          }
+        >
+          Draw
         </Alert>
       )}
       <Grid container spacing={0.5}>
